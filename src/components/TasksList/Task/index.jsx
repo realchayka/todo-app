@@ -1,85 +1,77 @@
 import React from 'react'
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns'
 import './task.css'
 import propTypes from 'prop-types'
-
 
 export default class Task extends React.Component {
   state = {
     edit: false,
     value: '',
-
   }
 
- 
-
   handleEditTrue = () => {
-    this.setState({edit: true})
+    this.setState({ edit: true })
   }
 
   handleKeyUp = (event) => {
     event.preventDefault()
-    if(this.state.value === ''){
+    if (this.state.value === '') {
       return
-    }
-    else if(event.code === 'Enter' ){
+    } else if (event.code === 'Enter') {
       this.props.changeItem(this.props.id, this.state.value)
       this.setState({
         label: '',
-        edit: false
+        edit: false,
       })
-
     }
   }
 
   onLabelChange = (e) => {
     this.setState({
-      value: e.target.value
+      value: e.target.value,
     })
-
   }
-  
 
-  render (){
-
-   
-
-
-    const {edit} = this.state
-    const {label, successful, onDeleted, onSuccessful, id, createdDate} = this.props
+  render() {
+    const { edit } = this.state
+    const { label, successful, onDeleted, onSuccessful, id, createdDate } = this.props
 
     const timeDifference = formatDistanceToNow(createdDate, {
       addSuffix: true,
-      includeSeconds: true
+      includeSeconds: true,
     })
 
     let classNames = ''
-    if(successful){
+    if (successful) {
       classNames += ' completed'
     }
-    if (edit){
+    if (edit) {
       classNames += ' editing'
     }
 
     return (
-
-
       <li className={classNames}>
-            <div className="view">
-              <input id={`checkbox-${id}`} className="toggle" type="checkbox" />
-              <label htmlFor={`checkbox-${id}`} onClick={() => onSuccessful(id)}>
-                <span className="description">{label}</span>
-                <span className="created">{timeDifference}</span>
-              </label>
-              <button onClick={this.handleEditTrue} className="icon icon-edit"></button>
-              <button onClick={() => onDeleted(id)} className="icon icon-destroy"></button>
-          </div>
-          {edit && <input onKeyUp={this.handleKeyUp} onChange={this.onLabelChange} type="text" className="edit" placeholder='Edit...' />}
-        </li>
+        <div className="view">
+          <input id={`checkbox-${id}`} className="toggle" type="checkbox" />
+          <label htmlFor={`checkbox-${id}`} onClick={() => onSuccessful(id)}>
+            <span className="description">{label}</span>
+            <span className="created">{timeDifference}</span>
+          </label>
+          <button onClick={this.handleEditTrue} className="icon icon-edit"></button>
+          <button onClick={() => onDeleted(id)} className="icon icon-destroy"></button>
+        </div>
+        {edit && (
+          <input
+            onKeyUp={this.handleKeyUp}
+            onChange={this.onLabelChange}
+            type="text"
+            className="edit"
+            placeholder="Edit..."
+          />
+        )}
+      </li>
     )
-
   }
-  
 }
 
 Task.propTypes = {
@@ -90,9 +82,8 @@ Task.propTypes = {
   id: propTypes.number.isRequired,
   successful: propTypes.bool.isRequired,
   created: propTypes.string.isRequired,
-  createdDate: propTypes.instanceOf(Date).isRequired
+  createdDate: propTypes.instanceOf(Date).isRequired,
 }
-
 
 Task.defaultProps = {
   changeItem: () => {},
@@ -102,5 +93,5 @@ Task.defaultProps = {
   id: 0,
   successful: false,
   created: '',
-  createdDate: new Date()
+  createdDate: new Date(),
 }
