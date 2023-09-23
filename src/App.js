@@ -6,7 +6,7 @@ import NewTaskForm from './components/NewTaskForm'
 import TasksList from './components/TasksList'
 
 export default class App extends React.Component {
-  static maxId = 100
+  maxId = 100
   state = {
     todoData: [],
     screen: 'all',
@@ -76,7 +76,9 @@ export default class App extends React.Component {
     this.setState(({ todoData }) => {
       const newArray = [...todoData]
       const idx = todoData.findIndex((el) => el.id === id)
-      newArray[idx].successful = !newArray[idx].successful
+      if (idx !== -1) {
+        newArray[idx].successful = !newArray[idx].successful
+      }
       return {
         todoData: newArray,
       }
