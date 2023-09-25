@@ -52,7 +52,7 @@ export default class Task extends React.Component {
     return (
       <li className={classNames}>
         <div className="view">
-          <input id={`checkbox-${id}`} className="toggle" type="checkbox" />
+          <input id={`checkbox-${id}`} className="toggle" type="checkbox" checked={successful} />
           <label htmlFor={`checkbox-${id}`} onClick={() => onSuccessful(id)}>
             <span className="description">{label}</span>
             <span className="created">{timeDifference}</span>
