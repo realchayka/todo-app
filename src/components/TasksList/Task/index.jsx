@@ -8,6 +8,13 @@ export default class Task extends React.Component {
     edit: false,
     value: '',
   }
+  handlePlayClick = () => {
+    this.props.startTimer(this.props.id)
+  }
+
+  handlePauseClick = () => {
+    this.props.stopTimer(this.props.id)
+  }
 
   handleEditTrue = () => {
     this.setState({ edit: true })
@@ -34,7 +41,7 @@ export default class Task extends React.Component {
 
   render() {
     const { edit } = this.state
-    const { label, successful, onDeleted, onSuccessful, id, createdDate } = this.props
+    const { label, successful, onDeleted, onSuccessful, id, createdDate, min, sec } = this.props
 
     const timeDifference = formatDistanceToNow(createdDate, {
       addSuffix: true,
@@ -52,10 +59,17 @@ export default class Task extends React.Component {
     return (
       <li className={classNames}>
         <div className="view">
-          <input id={`checkbox-${id}`} className="toggle" type="checkbox" checked={successful} />
-          <label htmlFor={`checkbox-${id}`} onClick={() => onSuccessful(id)}>
-            <span className="description">{label}</span>
-            <span className="created">{timeDifference}</span>
+          <input id={`checkbox-${id}`} className="toggle" type="checkbox" defaultChecked={successful} />
+          <label>
+            <label htmlFor={`checkbox-${id}`} onClick={() => onSuccessful(id)} className="title">
+              {label}
+            </label>
+            <span className="description">
+              <button onClick={this.handlePlayClick} className="icon icon-play"></button>
+              <button onClick={this.handlePauseClick} className="icon icon-pause"></button>
+              {min}:{sec}
+            </span>
+            <span className="description">{timeDifference}</span>
           </label>
           <button onClick={this.handleEditTrue} className="icon icon-edit"></button>
           <button onClick={() => onDeleted(id)} className="icon icon-destroy"></button>

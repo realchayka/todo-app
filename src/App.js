@@ -12,13 +12,54 @@ export default class App extends React.Component {
     screen: 'all',
   }
 
-  createTodoItem(label) {
+  startTimer = (id) => {
+    this.setState(({ todoData }) => {
+      const newArray = todoData.map((task) => {
+        if (task.id === id) {
+          if (!task.timerRunning) {
+            task.timerRunning = true
+            task.intervalId = setInterval(() => {
+              if (task.sec > 0) {
+                task.sec -= 1
+              } else if (task.min > 0) {
+                task.sec = 59
+                task.min -= 1
+              } else {
+                clearInterval(task.intervalId)
+                task.timerRunning = false
+              }
+              this.setState({ todoData: newArray })
+            }, 1000)
+          }
+        }
+        return task
+      })
+      return { todoData: newArray }
+    })
+  }
+
+  stopTimer = (id) => {
+    this.setState(({ todoData }) => {
+      const newArray = todoData.map((task) => {
+        if (task.id === id && task.timerRunning) {
+          clearInterval(task.intervalId)
+          task.timerRunning = false
+        }
+        return task
+      })
+      return { todoData: newArray }
+    })
+  }
+
+  createTodoItem(label, min, sec) {
     const createdDate = new Date()
     return {
       createdDate,
       label,
       successful: false,
       id: this.maxId++,
+      min,
+      sec,
       created: formatDistanceToNow(createdDate, {
         addSuffix: true,
         includeSeconds: true,
@@ -62,8 +103,8 @@ export default class App extends React.Component {
     })
   }
 
-  addItem = (text) => {
-    const newItem = this.createTodoItem(text)
+  addItem = (text, min, sec) => {
+    const newItem = this.createTodoItem(text, min, sec)
     this.setState(({ todoData }) => {
       const newArray = [...todoData, newItem]
       return {
@@ -99,7 +140,9 @@ export default class App extends React.Component {
           screenState={screen}
           onSuccessful={this.successfulItemHandler}
           onDeleted={this.deleteItem}
-          todoData={this.state.todoData}
+          todoData={todoData}
+          startTimer={this.startTimer}
+          stopTimer={this.stopTimer}
         />
         <section className="main">
           <Footer

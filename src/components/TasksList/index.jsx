@@ -6,7 +6,7 @@ import Task from './Task'
 
 export default class TasksList extends React.Component {
   render() {
-    const { todoData, onDeleted, onSuccessful, screenState, changeItem } = this.props
+    const { todoData, onDeleted, onSuccessful, screenState, changeItem, startTimer, stopTimer } = this.props
 
     const activeData = todoData.filter((todo) => !todo.successful)
     const completedData = todoData.filter((todo) => todo.successful)
@@ -15,11 +15,28 @@ export default class TasksList extends React.Component {
         {/* all */}
         {screenState === 'all' &&
           todoData.map((todo) => (
-            <Task changeItem={changeItem} key={todo.id} onSuccessful={onSuccessful} onDeleted={onDeleted} {...todo} />
+            <Task
+              startTimer={startTimer}
+              stopTimer={stopTimer}
+              changeItem={changeItem}
+              key={todo.id}
+              onSuccessful={onSuccessful}
+              onDeleted={onDeleted}
+              {...todo}
+            />
           ))}
         {/* active */}
         {screenState === 'active' &&
-          activeData.map((todo) => <Task key={todo.id} onSuccessful={onSuccessful} onDeleted={onDeleted} {...todo} />)}
+          activeData.map((todo) => (
+            <Task
+              startTimer={startTimer}
+              stopTimer={stopTimer}
+              key={todo.id}
+              onSuccessful={onSuccessful}
+              onDeleted={onDeleted}
+              {...todo}
+            />
+          ))}
         {/* completed */}
         {screenState === 'completed' &&
           completedData.map((todo) => (
