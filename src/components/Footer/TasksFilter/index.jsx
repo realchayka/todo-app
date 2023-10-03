@@ -32,7 +32,7 @@ export default class TasksFilter extends React.Component {
 
 TasksFilter.propTypes = {
   handleScreenStateChange: propTypes.func.isRequired,
-  screen: propTypes.oneOf(['all', 'screen', 'completed']).isRequired,
+  screen: propTypes.oneOf(['all', 'active', 'completed']).isRequired,
 }
 
 TasksFilter.defaultProps = {

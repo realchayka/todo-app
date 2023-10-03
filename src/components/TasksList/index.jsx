@@ -4,47 +4,66 @@ import propTypes from 'prop-types'
 import './taskList.css'
 import Task from './Task'
 
-export default class TasksList extends React.Component {
-  render() {
-    const { todoData, onDeleted, onSuccessful, screenState, changeItem, startTimer, stopTimer } = this.props
-
-    const activeData = todoData.filter((todo) => !todo.successful)
-    const completedData = todoData.filter((todo) => todo.successful)
-    return (
-      <ul className="todo-list">
-        {/* all */}
-        {screenState === 'all' &&
-          todoData.map((todo) => (
-            <Task
-              startTimer={startTimer}
-              stopTimer={stopTimer}
-              changeItem={changeItem}
-              key={todo.id}
-              onSuccessful={onSuccessful}
-              onDeleted={onDeleted}
-              {...todo}
-            />
-          ))}
-        {/* active */}
-        {screenState === 'active' &&
-          activeData.map((todo) => (
-            <Task
-              startTimer={startTimer}
-              stopTimer={stopTimer}
-              key={todo.id}
-              onSuccessful={onSuccessful}
-              onDeleted={onDeleted}
-              {...todo}
-            />
-          ))}
-        {/* completed */}
-        {screenState === 'completed' &&
-          completedData.map((todo) => (
-            <Task key={todo.id} onSuccessful={onSuccessful} onDeleted={onDeleted} {...todo} />
-          ))}
-      </ul>
-    )
-  }
+function TasksList({
+  todoData,
+  onDeleted,
+  onSuccessful,
+  screenState,
+  changeItem,
+  setTodoData,
+  startTimer,
+  stopTimer,
+  pauseItemHandler,
+}) {
+  const activeData = todoData.filter((todo) => !todo.successful)
+  const completedData = todoData.filter((todo) => todo.successful)
+  return (
+    <ul className="todo-list">
+      {/* all */}
+      {screenState === 'all' &&
+        todoData.map((todo) => (
+          <Task
+            pauseItemHandler={pauseItemHandler}
+            startTimer={startTimer}
+            stopTimer={stopTimer}
+            setTodoData={setTodoData}
+            changeItem={changeItem}
+            key={todo.id}
+            onSuccessful={onSuccessful}
+            onDeleted={onDeleted}
+            {...todo}
+          />
+        ))}
+      {/* active */}
+      {screenState === 'active' &&
+        activeData.map((todo) => (
+          <Task
+            pauseItemHandler={pauseItemHandler}
+            startTimer={startTimer}
+            stopTimer={stopTimer}
+            setTodoData={setTodoData}
+            key={todo.id}
+            onSuccessful={onSuccessful}
+            onDeleted={onDeleted}
+            {...todo}
+          />
+        ))}
+      {/* completed */}
+      {screenState === 'completed' &&
+        completedData.map((todo) => (
+          <Task
+            pauseItemHandler={pauseItemHandler}
+            startTimer={startTimer}
+            stopTimer={stopTimer}
+            setTodoData={setTodoData}
+            key={todo.id}
+            onSuccessful={onSuccessful}
+            onDeleted={onDeleted}
+            {...todo}
+          />
+        ))}
+    </ul>
+  )
 }
 
 TasksList.propTypes = {
@@ -68,3 +87,5 @@ TasksList.defaultProps = {
   screenState: 'all',
   changeItem: () => {},
 }
+
+export default TasksList
